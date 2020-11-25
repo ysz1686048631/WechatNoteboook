@@ -1,10 +1,10 @@
 
-    ## 基于Mpvue的记事本小程序
+## 基于Mpvue的记事本小程序
        - 技术
          - Vue，Vuex
          - 原生小程序基础
          - Sass
-    ## 关于小程序 mpvue
+## 关于小程序 mpvue
 
    - mpvue的语法基于vue和小程序
 
