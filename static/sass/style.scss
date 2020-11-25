@@ -1,0 +1,506 @@
+$color:#fff;
+$themes: (
+  one: (
+    font-color: #fff,
+    background:#f1939c,
+    linebg:#a65a67
+  ),
+  two: (
+    font-color: #fff,
+    background:#74787a,
+    linebg:#5d3f51
+    
+  ),
+  three: (
+    font-color: #fff,
+    background:#b598a1,
+    linebg:#a35c8f
+    
+  ),
+);
+@mixin  themify($themes:$themes) {
+      
+      @each $name,$map in $themes {
+          
+          .theme-#{$name} &{
+                $theme-map:() !global;
+                //map-merge合并两个变量
+                $theme-map:map-merge($theme-map,$map) !global;
+                @content;  // 可以代表一整块样式，这里代表的时@inlcude中的{}的内容
+                $theme-map: null !global;  
+          }
+        
+      }
+      
+ 
+    
+}
+@function themed($key) {
+    @return map-get($theme-map, $key); //获取$theme-map中的font-color值
+  }
+@mixin font($size,$color,$weigth:100){
+       color:$color;
+       font-size:$size;
+       font-weight: $weigth;
+}  
+@mixin flex($direction:row){
+      display: flex;
+      flex-direction: $direction;
+      @content;
+}
+// span样式格式化
+@mixin spanwhd($width,$height,$dis:inline-block) {
+  display: $dis;
+  width:$width;
+  height:$height;
+  @content;
+}
+@mixin pad($tb,$lr){
+  padding: $tb $lr;
+  box-sizing: border-box;
+}
+.home_header {
+    @include themify($themes) {
+      color: themed('font-color');
+      background-color: themed('background');
+      width: 100%;
+      padding-bottom: 30px;
+      border-radius: 0 0 10rpx 10rpx;
+      &_top{
+
+        @include flex(){
+          align-items: center;
+          justify-content: space-between;
+          padding: 10rpx 10rpx;
+          box-sizing: border-box;
+          margin: 0 auto;
+        }
+         &_title{
+              @include font(30rpx,$color);
+              @include flex(row){
+                 
+              };
+              div{
+                @include font(35rpx,$color,bold);
+                margin-left: 30rpx;
+                img{
+                  width: 60rpx;
+                  height: 60rpx;
+                }
+              }
+         }
+         &_bar{
+              @include font(50rpx,$color);
+              width: 50rpx;
+              height: 50rpx;
+              margin-right: 50rpx;
+              img{
+                width: 100%;
+                height: 100%;
+              }
+         }
+      }
+      .time{
+        @include flex(row){
+          width: 90%;
+          align-items: center;
+          justify-content: space-between;
+        }
+        margin: 20rpx auto;
+        &>div{
+           
+           &>span{
+            @include font(35rpx,#fff);
+          }
+          &:nth-of-type(1){
+                &>span:nth-of-type(2){
+                  @include font(35rpx,#fff);
+                }
+          }
+          &:nth-of-type(2){
+              &>span{
+                   margin: 0 20rpx;
+              } 
+          }
+        }
+      }
+      //日历
+      &_calendar{
+        width: 95%;
+        margin: auto;
+        @include flex(){
+          align-items: center;
+        }
+        .calendar_list{
+           max-height: 350px;
+           transition: all .5rem ease-in 0s;
+          @include flex(){
+             flex-wrap: wrap;
+          };
+          &_item{
+            width:100rpx;
+            &>div{
+            
+             
+              &>.dataactive{
+                border: 1px solid #008c8c !important;
+                border-radius: 50%;
+              } &>.active{
+                color: #fff !important;
+                border: 1px solid #fff !important;
+                border-radius: 50%;
+           } 
+              &>.clickactive{
+            
+                border: 1px solid #f40 !important;
+                border-radius: 50%;
+           } 
+              &>span:nth-of-type(1){
+                
+                  @include font(30rpx,#fff);
+              }
+              &>span:nth-of-type(2){
+                
+                text-align: center;
+                @include font(28rpx,#fff,600);
+                @include spanwhd(60rpx,60rpx){
+                  line-height: 60rpx;
+                  border: 1px solid transparent;
+                  transition: all .5s ease-in 0s;
+                };
+                
+            }
+            .dotactive{
+              background: #fff;
+            }
+              &>span:nth-of-type(3){
+                @include spanwhd(10rpx,10rpx){
+                  
+                  margin-top: 10rpx;
+                  border-radius: 50%;
+                }; 
+                
+              }
+              @include flex(column){
+                justify-content: center;
+                align-items: center;
+              };
+              
+            }  
+          }
+      }
+      }
+    }
+    //progress样式
+    & + .progress{
+      @include themify($themes) {
+        color: themed('font-color');
+        background-color: themed('background');
+        
+        &>.line{
+          flex: 1;
+          height: 10rpx;
+          background: themed('linebg');
+          margin: 0 10rpx;
+          div{
+            
+             height: 100%;
+             background: #fff;
+             transition: all .5s ease-in 0s;
+          }
+      }
+      }
+      @include flex(row){
+            width: 95%;
+            padding: 30rpx 20rpx;
+            box-sizing: border-box;
+            margin: 0 auto;
+            margin-top: -30rpx;
+            align-items: center;
+            border-radius: 10rpx;
+            box-shadow: 3px 3px 15px #ccc;
+            font-size: 30rpx;  
+       };
+      
+
+    }
+    & ~ .home_calendar_list{
+         @include flex(column);
+         .home_calendar_list_item{
+          @include flex(){
+              width: 95%;
+              margin:0 auto;
+              border-radius: 10rpx;
+              @include pad(20rpx,20rpx);
+              margin-top: 20rpx;
+              margin-bottom: 50rpx;
+          };  
+          background: #fff;
+          box-shadow: 3px 3px 15px #777;
+              .tag{
+                 width: 100rpx;
+                 height:100rpx;
+                 padding: 10rpx 10rpx;
+                 box-sizing: border-box;
+                 @include font(28rpx,#fff);
+                 line-height: 40rpx; 
+                 text-align: center; 
+                 margin-left: -20rpx;
+                 border-radius: 0 20rpx 20rpx 0;
+                 &>img{
+                    width: 100%;
+                    height: 100%;
+                    
+                 }
+              }  
+              .tagactive{
+                background-color: #12aa9c;
+               }
+              .content{
+                @include flex(column);
+                @include font(30rpx,#333);
+                flex: 1;
+                @include pad(0,20rpx);
+                .activelist{
+                  height:auto !important;
+                  overflow: auto !important;
+                  white-space: normal !important;
+                  
+                  
+                }
+                &>div:nth-of-type(2){
+                   margin-top: 10rpx;
+                   height:50rpx;
+                   width: 370rpx;
+                   overflow: hidden;
+                   text-overflow: ellipsis;
+                   white-space: nowrap;
+                   transition: all .5s ease-in 0s;
+             
+                }
+                
+              }
+              &>.time{
+                @include flex(column);
+                @include font(30rpx,#333);
+                height: 50rpx;
+                overflow: hidden;
+                width: 200rpx;
+                overflow: hidden;
+                &>span:nth-of-type(1){
+                  @include font(25rpx,#333);
+                }
+                
+                
+              }
+              
+         }
+
+    }
+    & ~ .dalog{
+       width: 100%;
+       height: 100vh;
+       background: rgba(247, 247, 247, 0.527);
+       position: fixed;
+       top: 0;
+       overflow: hidden;
+       .dalog_content{
+          @include pad(10rpx,40rpx);
+          width: 98%;
+          height:60%;
+          background: #fff;
+          border-radius: 10rpx;  
+          margin: 20rpx auto;
+          transform: translateY(-200px);
+          transition: all .3s ease-in 0s;
+          opacity: 0;
+          &_title{
+            @include flex(row){
+              align-items: center;
+           
+             }  
+             .img{
+             
+               img{
+                width: 150rpx;
+                height: 150rpx;
+               }
+             }
+             .typeaddress,.times{
+              @include flex(column);
+               @include font(30rpx,#333);  
+               &>span{
+                margin: 5rpx 0;
+               }
+             }
+             .typeaddress{
+               flex: 1;
+               @include pad(0,40rpx);
+             }
+             .times{
+                  &>span{
+                     
+                      &:nth-of-type(1)::before{
+                          content: '';
+                          display: inline-block;
+                          width: 20rpx;
+                          height: 20rpx;
+                          border: 1px solid #88e80a;
+                          vertical-align: middle;
+                          border-radius: 50%;
+                          margin-right: 10rpx;
+                      }
+                      &:nth-of-type(2)::before{
+                        content: '';
+                        display: inline-block;
+                        width: 20rpx;
+                        height: 20rpx;
+                        border: 1px solid #d81e06;
+                        vertical-align: middle;
+                        border-radius: 50%;
+                        margin-right: 10rpx;
+                    }
+                  }
+             }
+          }
+          &_text{
+            @include font(30rpx,#333);
+            width: 100%;
+            height: 200px;
+            overflow-y: scroll;
+          }
+       }
+       .dalogactive{
+        transform: translateY(0) !important;
+     
+        opacity: 1 !important;
+       }
+       .dalog_bars{
+        transform: translateY(50px);
+        transition: all .3s ease-in 0s;
+        opacity: 0;
+        @include flex(row){
+            align-items: center;
+            justify-content: center;
+        }
+        .accomplish,.failomplish{
+          flex: 1; 
+          @include pad(10rpx,40rpx);
+          text-align: center;
+          border-radius: 10rpx;
+          margin: 0 10rpx;
+        }
+        .accomplish{
+     
+          background: #88e80a;
+          color: #fff;
+         
+        }
+        .failomplish{
+          background: #d81e06;
+          color: #fff;
+        }
+        .btnactive{
+          margin-left:0;
+          opacity: 1;  
+        } 
+      }
+      .close{
+         text-align: center;
+         color: #fff;
+         margin-top: 20rpx;
+         img{
+             width: 50rpx;
+             height: 50rpx;
+         }
+      }
+    }
+    
+       
+  }
+.userpage{
+     width: 100%;
+     height: 100vh;
+     background: #eeeeee;
+     &_header{
+      @include themify($themes) {
+        width: 100%;
+        height: 30vh;
+        color: themed('font-color');
+        background-color: themed('background');
+      }
+      .setting{
+         text-align: right;
+         @include pad(20rpx,20rpx);
+            img{
+               width: 50rpx;
+               height: 50rpx;
+            }
+      }
+     }
+     &_userinfo{
+      @include pad(20rpx,20rpx);
+      margin-top: -90rpx;
+         @include flex(column){
+        
+              align-items: center;
+         };
+        .user_avatar{
+            width: 140rpx;
+            height: 140rpx;
+            border-radius: 50%;
+            overflow: hidden;
+            img{
+                width: 100%;
+                
+            }
+           
+        }
+        .user_name{
+         
+          @include flex(column){
+             justify-content: center;
+             align-items: center;
+          };
+           @include font(32rpx,#333);
+           margin-top: 20rpx;
+           
+           
+        }
+       
+     }
+     &_listinfo{
+           width: 95%;
+           background: #fff;
+           margin: 0 auto;
+           @include pad(20rpx,30rpx);
+           border-radius: 10rpx;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+           @include flex(column);
+           .grid{
+            @include flex(row){
+                align-items: center;
+                margin-bottom: 20rpx;
+            };
+             &>div{
+               flex: 1;
+              @include flex(column){
+                 justify-content: center;
+                 align-items: center;
+                 
+              };
+              @include font(30rpx,#777);
+              border-bottom: 1px solid #eeeeee;
+             }  
+             &>div:nth-of-type(1){
+               border-right: 1px solid #eeeeee;
+             }
+           }
+           .cells{
+               @include flex(column);  
+               .title{
+                    @include font(30rpx,#333);
+               }
+           }
+     }
+}  
